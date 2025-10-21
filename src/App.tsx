@@ -174,6 +174,7 @@ function App() {
 
   const [costs, setCosts] = useState<number[][]>(createMatrix(3, 3, 0))
   const [result, setResult] = useState<VogelResult | null>(null)
+  const [error, setError] = useState<string>('')
 
   useEffect(() => {
     const nextRows = supplies.length
@@ -197,12 +198,24 @@ function App() {
   function onCalculate() {
     if (supplies.length === 0 || demands.length === 0) {
       setResult(null)
+      setError('')
       return
     }
     if (costs.length !== supplies.length || (costs[0]?.length ?? 0) !== demands.length) {
       setResult(null)
+      setError('')
       return
     }
+    const supplySum = supplies.reduce((a, b) => a + b, 0)
+    const demandSum = demands.reduce((a, b) => a + b, 0)
+    if (supplySum !== demandSum) {
+      setResult(null)
+      setError(
+        `La suma de la oferta (${supplySum}) y la demanda (${demandSum}) no coincide. Esta calculadora solo admite casos balanceados.`,
+      )
+      return
+    }
+    setError('')
     const r = computeVogelApproximation(supplies, demands, costs)
     setResult(r)
   }
@@ -212,6 +225,7 @@ function App() {
     setDemandText('')
     setCosts([])
     setResult(null)
+    setError('')
   }
   return (
     <main className="min-h-screen w-screen bg-slate-100 text-slate-900">
@@ -287,6 +301,11 @@ function App() {
             </table>
           </div>
         </div>
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-3">
+            {error}
+          </div>
+        )}
 
         <div className="flex gap-3 justify-end">
           <button onClick={onCalculate} className="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white px-5 py-2.5 font-medium hover:bg-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition">
