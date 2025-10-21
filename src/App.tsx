@@ -261,7 +261,7 @@ function App() {
         <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
           <h2 className="text-lg font-medium mb-3">Matriz de costos</h2>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px] border-separate border-spacing-0">
+            <table className="w-auto mx-auto min-w-[520px] border-separate border-spacing-0">
               <thead>
                 <tr className="bg-slate-50">
                   <th className="sticky left-0 z-10 bg-slate-50 text-left px-3 py-2 border-b border-slate-200">Origen \\ Destino</th>
@@ -276,9 +276,9 @@ function App() {
                   <tr key={i} className="odd:bg-slate-50/60">
                     <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`Origen ${i + 1}`}</th>
                     {demands.map((_, j) => (
-                      <td key={j} className="px-3 py-2 border-b border-slate-200">
+                      <td key={j} className="px-2 py-1.5 border-b border-slate-200">
                         <input
-                          className="w-full bg-white border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                          className="w-20 text-center bg-white border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-300"
                           placeholder={`c${i + 1}${j + 1}`}
                           value={Number.isFinite(costs[i]?.[j]) ? costs[i][j] : 0}
                           onChange={(e) => updateCost(i, j, e.target.value)}
@@ -320,7 +320,7 @@ function App() {
           <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
             <h2 className="text-lg font-medium mb-3">Asignación (Vogel)</h2>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[560px] border-separate border-spacing-0">
+              <table className="w-auto mx-auto min-w-[520px] border-separate border-spacing-0">
                 <thead>
                   <tr className="bg-slate-50">
                     <th className="sticky left-0 z-10 bg-slate-50 text-left px-3 py-2 border-b border-slate-200">Origen \\ Destino</th>
@@ -333,11 +333,21 @@ function App() {
                   {supplies.map((_, i) => (
                     <tr key={i} className="odd:bg-slate-50/60">
                       <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`Origen ${i + 1}`}</th>
-                      {demands.map((_, j) => (
-                        <td key={j} className="px-3 py-2 border-b border-slate-200">
-                          {result.allocations[i]?.[j] ?? 0}
-                        </td>
-                      ))}
+                      {demands.map((_, j) => {
+                        const val = result.allocations[i]?.[j] ?? 0
+                        const isChosen = val > 0
+                        const cellClass = isChosen
+                          ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                          : 'bg-red-50 text-red-800 border-red-200'
+                        return (
+                          <td
+                            key={j}
+                            className={`text-center font-medium px-3 py-2 border-b ${cellClass}`}
+                          >
+                            {val}
+                          </td>
+                        )
+                      })}
                     </tr>
                   ))}
                 </tbody>
