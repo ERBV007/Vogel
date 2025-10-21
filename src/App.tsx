@@ -228,28 +228,28 @@ function App() {
     setError('')
   }
   return (
-    <main className="min-h-screen w-screen bg-slate-100 text-slate-900">
-      <header className="bg-white border-b border-slate-200 px-6 py-4">
-        <h1 className="text-xl font-semibold tracking-tight">Método de Aproximación de Vogel</h1>
+    <main className="min-h-screen w-full bg-[#e8e4dc] text-[#3d4a3e]">
+      <header className="bg-[#3d4a3e] border-b-2 border-[#6b7c6e] px-3 sm:px-6 py-3 sm:py-4">
+        <h1 className="text-base sm:text-xl font-semibold tracking-tight text-[#c8cabd]">Método de Aproximación de Vogel</h1>
       </header>
 
-      <section className="px-6 py-6 grid gap-6 max-w-5xl mx-auto">
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-          <h2 className="text-lg font-medium mb-2">Datos del problema</h2>
-          <div className="grid gap-4 md:grid-cols-2">
+      <section className="px-3 sm:px-6 py-4 sm:py-6 grid gap-4 sm:gap-6 max-w-5xl mx-auto">
+        <div className="bg-[#f5f3ed] border-2 border-[#a8aa9e] p-3 sm:p-4 shadow-sm">
+          <h2 className="text-base sm:text-lg font-medium mb-2 text-[#3d4a3e]">Datos del problema</h2>
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
             <div className="grid gap-1">
-              <label className="text-sm text-slate-600">Ofertas (Suministros)</label>
+              <label className="text-xs sm:text-sm text-[#6b7c6e] font-medium">Ofertas (Suministros)</label>
               <input
-                className="bg-white border border-slate-300 rounded px-3 py-2 shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="bg-white border-2 border-[#c8cabd] px-2 sm:px-3 py-2 text-sm sm:text-base text-[#3d4a3e] focus:outline-none focus:border-[#6b7c6e] transition-colors"
                 placeholder="Ej: 20, 30, 25"
                 value={supplyText}
                 onChange={(e) => setSupplyText(e.target.value)}
               />
             </div>
             <div className="grid gap-1">
-              <label className="text-sm text-slate-600">Demandas</label>
+              <label className="text-xs sm:text-sm text-[#6b7c6e] font-medium">Demandas</label>
               <input
-                className="bg-white border border-slate-300 rounded px-3 py-2 shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="bg-white border-2 border-[#c8cabd] px-2 sm:px-3 py-2 text-sm sm:text-base text-[#3d4a3e] focus:outline-none focus:border-[#6b7c6e] transition-colors"
                 placeholder="Ej: 10, 28, 22, 15"
                 value={demandText}
                 onChange={(e) => setDemandText(e.target.value)}
@@ -258,103 +258,122 @@ function App() {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-          <h2 className="text-lg font-medium mb-3">Matriz de costos</h2>
+        <div className="bg-[#f5f3ed] border-2 border-[#a8aa9e] p-3 sm:p-4 shadow-sm">
+          <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-3 text-[#3d4a3e]">Matriz de costos</h2>
           <div className="overflow-x-auto">
-            <table className="w-auto mx-auto min-w-[520px] border-separate border-spacing-0">
-              <thead>
-                <tr className="bg-slate-50">
-                  <th className="sticky left-0 z-10 bg-slate-50 text-left px-3 py-2 border-b border-slate-200">Origen \\ Destino</th>
-                  {demands.map((_, j) => (
-                    <th key={j} className="px-3 py-2 border-b border-slate-200">{`Destino ${j + 1}`}</th>
-                  ))}
-                  <th className="px-3 py-2 border-b border-slate-200">Oferta</th>
-                </tr>
-              </thead>
-              <tbody>
-                {supplies.map((_, i) => (
-                  <tr key={i} className="odd:bg-slate-50/60">
-                    <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`Origen ${i + 1}`}</th>
+            <div className="flex justify-center">
+              <table className="border-separate border-spacing-0">
+                <thead>
+                  <tr className="bg-[#3d4a3e]">
+                    <th className="bg-[#3d4a3e] text-left px-1.5 sm:px-3 py-1.5 sm:py-2 border-b-2 border-[#6b7c6e] text-[#c8cabd] text-[10px] sm:text-sm font-semibold">O\\D</th>
                     {demands.map((_, j) => (
-                      <td key={j} className="px-2 py-1.5 border-b border-slate-200">
-                        <input
-                          className="w-20 text-center bg-white border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-300"
-                          placeholder={`c${i + 1}${j + 1}`}
-                          value={Number.isFinite(costs[i]?.[j]) ? costs[i][j] : 0}
-                          onChange={(e) => updateCost(i, j, e.target.value)}
-                        />
-                      </td>
+                      <th key={j} className="px-1.5 sm:px-3 py-1.5 sm:py-2 border-b-2 border-[#6b7c6e] text-[#c8cabd] text-[10px] sm:text-sm font-semibold whitespace-nowrap">D{j + 1}</th>
                     ))}
-                    <td className="px-3 py-2 border-b border-slate-200 text-slate-700">{supplies[i] ?? '—'}</td>
+                    <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 border-b-2 border-[#6b7c6e] text-[#c8cabd] text-[10px] sm:text-sm font-semibold whitespace-nowrap">Oferta</th>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-t border-slate-200">Demanda</th>
-                  {demands.map((d, j) => (
-                    <td key={j} className="px-3 py-2 border-t border-slate-200 text-slate-700">{d ?? '—'}</td>
+                </thead>
+                <tbody>
+                  {supplies.map((_, i) => (
+                    <tr key={i} className="odd:bg-[#e8e4dc]/40">
+                      <th className="bg-[#f5f3ed] text-left font-medium px-1.5 sm:px-3 py-1.5 sm:py-2 border-b border-[#c8cabd] text-[#3d4a3e] text-[10px] sm:text-sm whitespace-nowrap">O{i + 1}</th>
+                      {demands.map((_, j) => (
+                        <td key={j} className="px-0.5 sm:px-2 py-1 sm:py-1.5 border-b border-[#c8cabd]">
+                          <input
+                            className="w-10 sm:w-16 md:w-20 text-center bg-white border border-[#c8cabd] px-1 sm:px-2 py-1 text-[10px] sm:text-sm text-[#3d4a3e] focus:outline-none focus:border-[#6b7c6e] transition-colors"
+                            placeholder="0"
+                            value={Number.isFinite(costs[i]?.[j]) ? costs[i][j] : 0}
+                            onChange={(e) => updateCost(i, j, e.target.value)}
+                          />
+                        </td>
+                      ))}
+                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 border-b border-[#c8cabd] text-[#6b7c6e] text-[10px] sm:text-sm font-medium text-center">{supplies[i] ?? '—'}</td>
+                    </tr>
                   ))}
-                  <td className="px-3 py-2 border-t border-slate-200 text-slate-700">Total</td>
-                </tr>
-              </tfoot>
-            </table>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th className="bg-[#f5f3ed] text-left font-medium px-1.5 sm:px-3 py-1.5 sm:py-2 border-t-2 border-[#a8aa9e] text-[#3d4a3e] text-[10px] sm:text-sm">Dem.</th>
+                    {demands.map((d, j) => (
+                      <td key={j} className="px-1.5 sm:px-3 py-1.5 sm:py-2 border-t-2 border-[#a8aa9e] text-[#6b7c6e] text-[10px] sm:text-sm font-medium text-center">{d ?? '—'}</td>
+                    ))}
+                    <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 border-t-2 border-[#a8aa9e] text-[#6b7c6e] text-[10px] sm:text-sm font-medium text-center">Total</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
         </div>
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-3">
+          <div className="bg-[#f5f3ed] border-2 border-[#8b7355] text-[#5c4a3a] p-2.5 sm:p-3 text-xs sm:text-sm font-medium">
             {error}
           </div>
         )}
 
-        <div className="flex gap-3 justify-end">
-          <button onClick={onCalculate} className="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white px-5 py-2.5 font-medium hover:bg-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
+          <button onClick={onCalculate} className="inline-flex items-center justify-center bg-[#6b7c6e] text-[#e8e4dc] px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base font-medium hover:bg-[#3d4a3e] focus:outline-none transition-colors">
             Calcular
           </button>
-          <button onClick={onClear} className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-2.5 font-medium text-slate-800 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 transition">
+          <button onClick={onClear} className="inline-flex items-center justify-center border-2 border-[#a8aa9e] bg-[#f5f3ed] px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base font-medium text-[#3d4a3e] hover:bg-[#e8e4dc] focus:outline-none transition-colors">
             Limpiar
           </button>
         </div>
 
         {result && costs.length > 0 && (
-          <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-            <h2 className="text-lg font-medium mb-3">Asignación (Vogel)</h2>
-            <div className="overflow-x-auto">
-              <table className="w-auto mx-auto min-w-[520px] border-separate border-spacing-0">
-                <thead>
-                  <tr className="bg-slate-50">
-                    <th className="sticky left-0 z-10 bg-slate-50 text-left px-3 py-2 border-b border-slate-200">Origen \\ Destino</th>
-                    {demands.map((_, j) => (
-                      <th key={j} className="px-3 py-2 border-b border-slate-200">{`Destino ${j + 1}`}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {supplies.map((_, i) => (
-                    <tr key={i} className="odd:bg-slate-50/60">
-                      <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`Origen ${i + 1}`}</th>
-                      {demands.map((_, j) => {
-                        const val = result.allocations[i]?.[j] ?? 0
-                        const isChosen = val > 0
-                        const cellClass = isChosen
-                          ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
-                          : 'bg-red-50 text-red-800 border-red-200'
-                        return (
-                          <td
-                            key={j}
-                            className={`text-center font-medium px-3 py-2 border-b ${cellClass}`}
-                          >
-                            {val}
-                          </td>
-                        )
-                      })}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="bg-[#f5f3ed] border-2 border-[#6b7c6e] p-3 sm:p-4 shadow-md">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3">
+              <h2 className="text-base sm:text-lg font-semibold text-[#3d4a3e]">Asignación (Vogel)</h2>
+              <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
+                <span className="inline-flex items-center gap-1.5 sm:gap-2">
+                  <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 border-2 border-[#6b7c6e] bg-[#7d9b87]"></span>
+                  <span className="text-[#3d4a3e] font-medium">Asignado</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 sm:gap-2">
+                  <span className="h-2.5 w-2.5 sm:h-3 sm:w-3 border-2 border-[#a8aa9e] bg-[#c8cabd]"></span>
+                  <span className="text-[#6b7c6e] font-medium">No asignado</span>
+                </span>
+              </div>
             </div>
-            <div className="mt-4 text-right font-medium">
-              Costo total: {result.totalCost}
+            <div className="overflow-x-auto">
+              <div className="flex justify-center">
+                <div className="border-2 border-[#a8aa9e]">
+                  <table className="border-collapse">
+                    <thead>
+                      <tr className="bg-[#3d4a3e]">
+                        <th className="bg-[#3d4a3e] text-left px-1.5 sm:px-4 py-1.5 sm:py-2 border-b-2 border-[#6b7c6e] text-[#c8cabd] text-[10px] sm:text-sm font-semibold">O\\D</th>
+                        {demands.map((_, j) => (
+                          <th key={j} className="px-1.5 sm:px-4 py-1.5 sm:py-2 border-b-2 border-[#6b7c6e] text-left text-[#c8cabd] text-[10px] sm:text-sm font-semibold whitespace-nowrap">D{j + 1}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {supplies.map((_, i) => (
+                        <tr key={i} className="odd:bg-[#e8e4dc]/40">
+                          <th className="bg-[#f5f3ed] text-left font-medium px-1.5 sm:px-4 py-1.5 sm:py-2 border-t border-[#c8cabd] text-[#3d4a3e] text-[10px] sm:text-sm whitespace-nowrap">O{i + 1}</th>
+                          {demands.map((_, j) => {
+                            const val = result.allocations[i]?.[j] ?? 0
+                            const isChosen = val > 0
+                            const cellClass = isChosen
+                              ? 'bg-[#7d9b87] text-white'
+                              : 'bg-[#c8cabd] text-[#6b7c6e]'
+                            const textWeight = isChosen ? 'font-semibold' : 'font-medium'
+                            return (
+                              <td
+                                key={j}
+                                className={`px-2 sm:px-4 py-1.5 sm:py-2 text-center border-t border-[#c8cabd] text-[10px] sm:text-sm ${cellClass} ${textWeight}`}
+                              >
+                                {val}
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 sm:mt-4 flex justify-center sm:justify-end">
+              <span className="inline-block bg-[#3d4a3e] text-[#c8cabd] px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-base font-semibold">Costo total: {result.totalCost}</span>
             </div>
           </div>
         )}
