@@ -266,15 +266,15 @@ function App() {
                 <tr className="bg-slate-50">
                   <th className="sticky left-0 z-10 bg-slate-50 text-left px-3 py-2 border-b border-slate-200">Origen \\ Destino</th>
                   {demands.map((_, j) => (
-                    <th key={j} className="px-3 py-2 border-b border-slate-200">{`D${j + 1}`}</th>
+                    <th key={j} className="px-3 py-2 border-b border-slate-200">{`Destino ${j + 1}`}</th>
                   ))}
-                  <th className="px-3 py-2 border-b border-slate-200">Demanda</th>
+                  <th className="px-3 py-2 border-b border-slate-200">Oferta</th>
                 </tr>
               </thead>
               <tbody>
                 {supplies.map((_, i) => (
                   <tr key={i} className="odd:bg-slate-50/60">
-                    <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`O${i + 1}`}</th>
+                    <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`Origen ${i + 1}`}</th>
                     {demands.map((_, j) => (
                       <td key={j} className="px-3 py-2 border-b border-slate-200">
                         <input
@@ -291,7 +291,7 @@ function App() {
               </tbody>
               <tfoot>
                 <tr>
-                  <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-t border-slate-200">Oferta</th>
+                  <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-t border-slate-200">Demanda</th>
                   {demands.map((d, j) => (
                     <td key={j} className="px-3 py-2 border-t border-slate-200 text-slate-700">{d ?? '—'}</td>
                   ))}
@@ -325,14 +325,14 @@ function App() {
                   <tr className="bg-slate-50">
                     <th className="sticky left-0 z-10 bg-slate-50 text-left px-3 py-2 border-b border-slate-200">Origen \\ Destino</th>
                     {demands.map((_, j) => (
-                      <th key={j} className="px-3 py-2 border-b border-slate-200">{`D${j + 1}`}</th>
+                      <th key={j} className="px-3 py-2 border-b border-slate-200">{`Destino ${j + 1}`}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {supplies.map((_, i) => (
                     <tr key={i} className="odd:bg-slate-50/60">
-                      <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`O${i + 1}`}</th>
+                      <th className="sticky left-0 z-10 bg-white text-left font-medium px-3 py-2 border-b border-slate-200">{`Origen ${i + 1}`}</th>
                       {demands.map((_, j) => (
                         <td key={j} className="px-3 py-2 border-b border-slate-200">
                           {result.allocations[i]?.[j] ?? 0}
