@@ -1,5 +1,11 @@
  
 
+// -------------------------------------------------------------
+// Home: Página de introducción y contexto teórico
+// -------------------------------------------------------------
+// Presenta un resumen del propósito de la app y una explicación breve del
+// método de Aproximación de Vogel para que el usuario entienda qué hace la
+// calculadora.
 function Home() {
   return (
     <section className="px-3 sm:px-6 py-6 sm:py-10 max-w-5xl mx-auto">

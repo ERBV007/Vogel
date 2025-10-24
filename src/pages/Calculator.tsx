@@ -1,5 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 
+// -------------------------------------------------------------
+// Calculadora del método de Aproximación de Vogel (VAM)
+// -------------------------------------------------------------
+// Este componente contiene:
+// - Tipos auxiliares para el resultado
+// - Funciones puras de ayuda (parseo, creación y redimensionado de matrices)
+// - Implementación del algoritmo de Vogel (computeVogelApproximation)
+// - La UI para ingresar datos, calcular y mostrar la asignación y el costo total
+// Las funciones están escritas para ser legibles y fáciles de ubicar.
+
+// Resultado que devuelve el algoritmo: asignaciones, costo total y si se añadieron
+// filas/columnas dummy para balancear oferta/demanda (solo para cálculo interno).
 type VogelResult = {
   allocations: number[][]
   totalCost: number
@@ -7,6 +19,7 @@ type VogelResult = {
   addedDummyColumn: boolean
 }
 
+// Convierte un texto separado por comas a una lista de números no negativos.
 function parseCSVNumbers(value: string): number[] {
   return value
     .split(',')
@@ -16,10 +29,12 @@ function parseCSVNumbers(value: string): number[] {
     .filter((v) => Number.isFinite(v) && v >= 0)
 }
 
+// Crea una matriz de tamaño rows x cols rellenada con "fill" (por defecto 0).
 function createMatrix(rows: number, cols: number, fill = 0): number[][] {
   return Array.from({ length: rows }, () => Array.from({ length: cols }, () => fill))
 }
 
+// Redimensiona una matriz manteniendo valores existentes cuando sea posible.
 function resizeMatrix(matrix: number[][], rows: number, cols: number, fill = 0): number[][] {
   const next = createMatrix(rows, cols, fill)
   for (let r = 0; r < Math.min(rows, matrix.length); r++) {
@@ -30,11 +45,16 @@ function resizeMatrix(matrix: number[][], rows: number, cols: number, fill = 0):
   return next
 }
 
+// Implementación del algoritmo de Aproximación de Vogel (VAM).
+// Recibe oferta, demanda y matriz de costos originales y devuelve
+// una solución factible inicial y su costo.
 function computeVogelApproximation(
   originalSupply: number[],
   originalDemand: number[],
   originalCosts: number[][],
 ): VogelResult {
+  // 1) Detectar si el problema está desbalanceado. Si lo está, se agrega una
+  // fila o columna "dummy" con costo 0 para poder realizar el procedimiento.
   const supplySum = originalSupply.reduce((a, b) => a + b, 0)
   const demandSum = originalDemand.reduce((a, b) => a + b, 0)
 
@@ -59,9 +79,12 @@ function computeVogelApproximation(
   const cols = demand.length
   const allocations = createMatrix(rows, cols, 0)
 
+  // Conjuntos de filas y columnas "activas" (aún con oferta/demanda disponible).
   const activeRows = new Set<number>(Array.from({ length: rows }, (_, i) => i))
   const activeCols = new Set<number>(Array.from({ length: cols }, (_, j) => j))
 
+  // Calcula la penalización de una fila: diferencia entre los dos costos más bajos
+  // disponibles, y recuerda también la columna de menor costo.
   function computeRowPenalty(r: number): { penalty: number; minCol: number } {
     const availableCosts: { cost: number; col: number }[] = []
     activeCols.forEach((c) => {
@@ -75,6 +98,7 @@ function computeVogelApproximation(
     return { penalty: Math.max(0, min2 - min1), minCol }
   }
 
+  // Análogo para columnas: penalización y fila de menor costo.
   function computeColPenalty(c: number): { penalty: number; minRow: number } {
     const availableCosts: { cost: number; row: number }[] = []
     activeRows.forEach((r) => {
@@ -88,6 +112,8 @@ function computeVogelApproximation(
     return { penalty: Math.max(0, min2 - min1), minRow }
   }
 
+  // Bucle principal: en cada iteración se elige la fila o columna con mayor
+  // penalización. En caso de empate, se rompe con el menor costo involucrado.
   while (activeRows.size > 0 && activeCols.size > 0) {
     let best = { isRow: true, index: -1, penalty: -1, tieCost: Number.POSITIVE_INFINITY }
 
@@ -109,7 +135,7 @@ function computeVogelApproximation(
       }
     })
 
-    if (best.index === -1) break
+    if (best.index === -1) break // No hay más asignaciones posibles
 
     let targetRow = -1
     let targetCol = -1
@@ -136,6 +162,7 @@ function computeVogelApproximation(
 
     if (targetRow === -1 || targetCol === -1) break
 
+    // Cantidad asignada es el mínimo entre oferta disponible y demanda requerida
     const allocation = Math.min(supply[targetRow], demand[targetCol])
     allocations[targetRow][targetCol] = allocation
     supply[targetRow] -= allocation
@@ -145,6 +172,7 @@ function computeVogelApproximation(
     if (demand[targetCol] === 0) activeCols.delete(targetCol)
   }
 
+  // Cálculo del costo total usando los costos originales (sin dummy visibles).
   let totalCost = 0
   for (let r = 0; r < allocations.length; r++) {
     for (let c = 0; c < allocations[0].length; c++) {
@@ -157,16 +185,22 @@ function computeVogelApproximation(
   return { allocations, totalCost, addedDummyRow, addedDummyColumn }
 }
 
+// Componente principal de la calculadora y su UI.
 function Calculator() {
+  // Entradas de texto (CSV) para ofertas y demandas.
   const [supplyText, setSupplyText] = useState('20, 30, 25')
   const [demandText, setDemandText] = useState('10, 28, 22, 15')
+  // Se transforman a arrays numéricos memoizados.
   const supplies = useMemo(() => parseCSVNumbers(supplyText), [supplyText])
   const demands = useMemo(() => parseCSVNumbers(demandText), [demandText])
 
+  // Matriz de costos, resultado y mensaje de error.
   const [costs, setCosts] = useState<number[][]>(createMatrix(3, 3, 0))
   const [result, setResult] = useState<VogelResult | null>(null)
   const [error, setError] = useState<string>('')
 
+  // Cuando cambian las dimensiones (tamaños de oferta/demanda),
+  // se redimensiona la matriz de costos.
   useEffect(() => {
     const nextRows = supplies.length
     const nextCols = demands.length
@@ -177,6 +211,7 @@ function Calculator() {
     setCosts((prev) => resizeMatrix(prev, nextRows, nextCols, 0))
   }, [supplies.length, demands.length])
 
+  // Actualiza una celda de la matriz de costos (solo números >= 0).
   function updateCost(r: number, c: number, value: string) {
     const n = Number(value)
     setCosts((prev) => {
@@ -186,6 +221,7 @@ function Calculator() {
     })
   }
 
+  // Valida entradas, verifica balance y ejecuta el algoritmo.
   function onCalculate() {
     if (supplies.length === 0 || demands.length === 0) {
       setResult(null)
@@ -211,6 +247,7 @@ function Calculator() {
     setResult(r)
   }
 
+  // Limpia todas las entradas y salidas.
   function onClear() {
     setSupplyText('')
     setDemandText('')
@@ -221,6 +258,7 @@ function Calculator() {
 
   return (
     <section className="px-3 sm:px-6 py-4 sm:py-6 grid gap-4 sm:gap-6 max-w-5xl mx-auto">
+      {/* --- Panel de datos de entrada --- */}
       <div className="bg-[#f5f3ed] border-2 border-[#a8aa9e] p-3 sm:p-4 shadow-sm">
         <h2 className="text-base sm:text-lg font-medium mb-2 text-[#3d4a3e]">Datos del problema</h2>
         <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
@@ -245,6 +283,7 @@ function Calculator() {
         </div>
       </div>
 
+      {/* --- Tabla para editar la matriz de costos --- */}
       <div className="bg-[#f5f3ed] border-2 border-[#a8aa9e] p-3 sm:p-4 shadow-sm">
         <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-3 text-[#3d4a3e]">Matriz de costos</h2>
         <div className="overflow-x-auto">
@@ -305,6 +344,7 @@ function Calculator() {
         </button>
       </div>
 
+      {/* --- Resultado de la asignación y costo total --- */}
       {result && costs.length > 0 && (
         <div className="bg-[#f5f3ed] border-2 border-[#6b7c6e] p-3 sm:p-4 shadow-md">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3">

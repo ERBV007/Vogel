@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react'
 import Home from './pages/Home'
 import Calculator from './pages/Calculator'
+
+// -------------------------------------------------------------
+// App: Contenedor principal y enrutamiento por hash
+// -------------------------------------------------------------
+// Este componente define la cabecera y un enrutamiento muy simple usando
+// el fragmento de la URL (location.hash) para alternar entre "Inicio" y
+// "Calculadora" sin agregar dependencias de router.
 function App() {
+  // Estado con el hash actual. Por defecto '#/' (Inicio)
   const [hash, setHash] = useState<string>(location.hash || '#/')
+
+  // Suscripción al evento 'hashchange' del navegador para actualizar la vista.
   useEffect(() => {
     const onHash = () => setHash(location.hash || '#/')
     window.addEventListener('hashchange', onHash)
